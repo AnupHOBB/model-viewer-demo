@@ -38,14 +38,8 @@ window.onload = () =>
     let status = 0
     let qrViewer = new QRViewer()
     
-    let m = document.createElement('model-viewer')
-    m.disableTap = true
-    m.cameraControls = true
-    m.touchAction = 'pan-y'
-    m.ar = true
-    m.arScale = 'fixed'
+    let m = document.querySelector('model-viewer')
     m.src = MODEL_PATH
-    console.log(m)
      
     let arButton = document.getElementById('ar-button')
     arButton.addEventListener('click', e=>{
