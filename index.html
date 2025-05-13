@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script type="importmap">
+            {
+                "imports":
+                {
+                    "three": "./node_modules/three/src/Three.js",
+					"lineMaterial": "./node_modules/three/examples/jsm/lines/LineMaterial.js",
+                    "orbit": "./node_modules/three/examples/jsm/controls/OrbitControls.js",
+                    "gltf-loader": "./node_modules/three/examples/jsm/loaders/GLTFLoader.js"
+                }
+            }
+        </script>
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+        <script type="text/javascript" src="qrcode.min.js"></script>
+        <script type="module" src="index.js"></script>
+        <link rel="stylesheet" href="qr.css"/>
+        <style>
+            body { overflow: hidden; }
+
+            canvas
+            {
+                position: absolute;
+                top: 0%;
+                left: 0%;
+                width: 100%;
+                height: 100%;
+            }
+
+            @media screen and (max-aspect-ratio : 1.25)
+            {
+                #loading-screen
+                {
+                    position: absolute;
+                    top: 0%;
+                    left: 0%;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 10;
+                    background-color: #F8FBFB;
+                } 
+            }
+
+            @media screen and (min-aspect-ratio : 1.25)
+            {
+                #loading-screen
+                {
+                    position: absolute;
+                    top: 0%;
+                    left: 0%;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 10;
+                    background-color: #F8FBFB;
+                }   
+            }
+
+            #loading-text-container
+            {
+                position: absolute;
+                top: 40%;
+                width: 100%;
+            }
+
+            @media screen and (max-aspect-ratio : 1.25)
+            {
+                #loading-text
+                {
+                    font-size: 5vh;
+                    text-align: center;
+                }
+            }
+
+            @media screen and (min-aspect-ratio : 1.25)
+            {
+                #loading-text
+                {
+                    font-size: 4vw;
+                    text-align: center;
+                }
+            }
+
+            div#ar-container
+            {
+                position: absolute;
+                top: 1%;
+                right: 1%;
+                user-select: none;
+            }
+
+            div#ar-button
+            {
+                display: flex;
+                gap: 1vh;
+                padding-left: 1vh;
+                padding-right: 1vh;
+                background-color: #E3E7E9;
+                border-radius: 1vh;
+            }
+
+            img#ar-icon
+            {
+                margin-top: 1vh;
+                width: 8vh;
+                height: 8vh;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas></canvas>
+        <div id="qr-menu">
+            <div id="qr-menu-inner">
+                <p id="qr-title">SCAN THE QR CODE TO VIEW IN YOUR PHONE</p>
+                <div id="qr-container"><div id="qr"></div></div>
+                <div class="dialog-back-container"><p id="qr-back" class="dialog-back">BACK</p></div>
+                <p id="qr-cross" class="cross-icon">X</p>
+            </div>
+        </div>
+        <div id="ar-container">
+            <div id="ar-button">
+                <img id="ar-icon" src="ar.png"/>
+            </div>
+        </div>
+        <div id="loading-screen"><div id="loading-text-container"><p id="loading-text">LOADING... 0%</p></div></div>
+    </body>
+</html>
