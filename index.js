@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'orbit'
-import { LineMaterial } from 'lineMaterial'
 import { GLTFLoader } from 'gltf-loader'
+import { FontLoader } from 'font-loader'
 import { QRViewer } from './QRViewer.js'
+import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
 const MODEL_PATH = 'bottle.glb'
 
@@ -55,15 +56,43 @@ window.onload = () =>
     let gltfLoader = new GLTFLoader()
     gltfLoader.load(MODEL_PATH, model=>{
         hasModelLoaded = true
-        scene.add(model.scene)
-        positionCamera(model.scene)
-        status = 100
-        document.body.removeChild(loadingScreen)
+        const loader = new FontLoader();
+        loader.load( 'Roobert_Medium_Regular.json', function (font) {
+            status = 100
+            scene.add(model.scene)
+            let bound = new THREE.Box3()
+            bound.setFromObject(model.scene)
+            positionCamera(bound)
+            
+            let widthDimension = new WidthDimension(scene, font, cameraPos.z)
+            widthDimension.setSize(bound.max.x - bound.min.x)
+            let width = (bound.max.x - bound.min.x).toFixed('3')
+            widthDimension.setText(width+'')
+            widthDimension.setZ(bound.max.z)
+
+            let heightDimension = new HeightDimension(scene, font, cameraPos.z)
+            let xOffsetHeight = heightDimension.planeSize.width * 0.75
+            heightDimension.setSize(bound.max.y - bound.min.y)
+            let height = (bound.max.y - bound.min.y).toFixed('3')
+            heightDimension.setText(height+'')
+            heightDimension.setX(bound.min.x - xOffsetHeight)
+            heightDimension.setY((bound.max.y - bound.min.y)/2)
+
+            let depthDimension = new DepthDimension(scene, font, cameraPos.z)
+            let xOffsetDepth = depthDimension.planeSize.width * 0.75
+            depthDimension.setSize(bound.max.z - bound.min.z)
+            let depth = (bound.max.z - bound.min.z).toFixed('3')
+            depthDimension.setText(depth+'')
+            depthDimension.setX(bound.max.x + xOffsetDepth)
+            depthDimension.setY(bound.min.y)
+
+            document.body.removeChild(loadingScreen)
+        })
     }, p=>{
-        status = (p.loaded/p.total) * 50
+        status = (p.loaded/p.total) * 99
         status = Math.trunc(status)
-        if (status > 50)
-            status = 50
+        if (status > 99)
+            status = 99
     }, e=>{})
 
     showProgress()
@@ -99,12 +128,10 @@ window.onload = () =>
         }
     }
 
-    function positionCamera(model)
+    function positionCamera(bound)
     {
-        if (model != undefined)
+        if (bound != undefined)
         {
-            let bound = new THREE.Box3()
-            bound.setFromObject(model)
             let distanceVector = new THREE.Vector3(bound.max.x - bound.min.x, bound.max.y - bound.min.y, bound.max.z - bound.min.z)
             let midPoint = new THREE.Vector3((bound.max.x + bound.min.x)/2, (bound.max.y + bound.min.y)/2, (bound.max.z + bound.min.z)/2)
             let factor = (distanceVector.length()/2) * Math.cos(THREE.MathUtils.degToRad(camera.fov/2))
