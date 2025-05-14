@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { TextGeometry } from 'text-geometry'
 
+
+//text depth is 0.001 when camera is at z = 3
 const CAM_ANGLE_IN_RADIAN = 0.024994793618920156
 
 const TYPE = 
@@ -21,10 +23,11 @@ class Dimension
         this.fontSize = height/2
         this.dimension = new THREE.Group()
         this.font = font
+        this.textDepth = (0.001 * cameraZ)/3
         let dimensionTextGeometry = new TextGeometry('40', {
             font: this.font,
             size: this.fontSize,
-            depth: 0.0001,
+            depth: this.textDepth,
             curveSegments: 16,
             bevelEnabled: false,
             bevelThickness: 0.0125,
@@ -115,7 +118,7 @@ class Dimension
         let geometry = new TextGeometry(text, {
             font: this.font,
             size: this.fontSize,
-            depth: 0.0001,
+            depth: this.textDepth,
             curveSegments: 16,
             bevelEnabled: false,
             bevelThickness: 0.0125,

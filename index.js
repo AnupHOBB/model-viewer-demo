@@ -5,7 +5,7 @@ import { FontLoader } from 'font-loader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
-const MODEL_PATH = 'bottle.glb'
+const MODEL_PATH = 'test.glb'
 
 window.onload = () =>
 {
@@ -66,14 +66,14 @@ window.onload = () =>
             
             let widthDimension = new WidthDimension(scene, font, cameraPos.z)
             widthDimension.setSize(bound.max.x - bound.min.x)
-            let width = (bound.max.x - bound.min.x).toFixed('3')
+            let width = (bound.max.x - bound.min.x).toFixed('2')
             widthDimension.setText(width+'')
             widthDimension.setZ(bound.max.z)
 
             let heightDimension = new HeightDimension(scene, font, cameraPos.z)
             let xOffsetHeight = heightDimension.planeSize.width * 0.75
             heightDimension.setSize(bound.max.y - bound.min.y)
-            let height = (bound.max.y - bound.min.y).toFixed('3')
+            let height = (bound.max.y - bound.min.y).toFixed('2')
             heightDimension.setText(height+'')
             heightDimension.setX(bound.min.x - xOffsetHeight)
             heightDimension.setY((bound.max.y - bound.min.y)/2)
@@ -81,7 +81,7 @@ window.onload = () =>
             let depthDimension = new DepthDimension(scene, font, cameraPos.z)
             let xOffsetDepth = depthDimension.planeSize.width * 0.75
             depthDimension.setSize(bound.max.z - bound.min.z)
-            let depth = (bound.max.z - bound.min.z).toFixed('3')
+            let depth = (bound.max.z - bound.min.z).toFixed('2')
             depthDimension.setText(depth+'')
             depthDimension.setX(bound.max.x + xOffsetDepth)
             depthDimension.setY(bound.min.y)
