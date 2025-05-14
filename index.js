@@ -5,7 +5,7 @@ import { FontLoader } from 'font-loader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
-const MODEL_PATH = 'test.glb'
+const MODEL_PATH = 'assets/RuchedOttoman_M.glb'
 
 window.onload = () =>
 {
