@@ -5,7 +5,7 @@ import { FontLoader } from 'font-loader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
-const MODEL_PATH = 'assets/RuchedOttoman_M.glb'
+const MODEL_PATH = 'assets/SparklingSpringWater01234_28oz_M.glb'
 
 window.onload = () =>
 {

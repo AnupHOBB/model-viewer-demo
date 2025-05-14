@@ -47,7 +47,7 @@ class Dimension
         this.lineMaterial = new THREE.LineBasicMaterial({
             color: new THREE.Color(1, 0, 0), 
             vertexColors: true, 
-            linewidth: 5
+            linewidth: this._isHandHeldDevice() ? 1 : 5
         })
         this.lineMaterial.linewidth = 10
         this.lineMaterial.worldUnits = true
