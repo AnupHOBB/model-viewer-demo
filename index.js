@@ -53,9 +53,9 @@ window.onload = () =>
     let loadingScreen = document.getElementById('loading-screen')
     let loadingText = document.getElementById('loading-text')
 
-    let widthDimension = new WidthDimension(scene, cameraPos.z)
-    let heightDimension = new HeightDimension(scene, cameraPos.z)
-    let depthDimension = new DepthDimension(scene, cameraPos.z)
+    let widthDimension
+    let heightDimension
+    let depthDimension
 
     let gltfLoader = new GLTFLoader()
     gltfLoader.load(MODEL_PATH, model=>{
@@ -68,17 +68,21 @@ window.onload = () =>
             bound.setFromObject(model.scene)
             positionCamera(bound)
             
+            widthDimension = new WidthDimension(scene, cameraPos.z)
             widthDimension.setSize(bound.max.x - bound.min.x)
             let width = (bound.max.x - bound.min.x).toFixed('2')
             widthDimension.setText(width+'')
-            widthDimension.setZ(bound.max.z)
+            widthDimension.setX((bound.max.x + bound.min.x)/2)
+            widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2))
 
+            heightDimension = new HeightDimension(scene, cameraPos.z)
             heightDimension.setSize(bound.max.y - bound.min.y)
             let height = (bound.max.y - bound.min.y).toFixed('2')
             heightDimension.setText(height+'')
             heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
             heightDimension.setY((bound.max.y - bound.min.y)/2)
 
+            depthDimension = new DepthDimension(scene, cameraPos.z)
             depthDimension.setSize(bound.max.z - bound.min.z)
             let depth = (bound.max.z - bound.min.z).toFixed('2')
             depthDimension.setText(depth+'')
@@ -107,9 +111,12 @@ window.onload = () =>
         controls.update()
         directLight.position.set(camera.position.x, camera.position.y, camera.position.z)
         directLight.lookAt(new THREE.Vector3())
-        widthDimension.updateDimensionTextPosition(camera)
-        heightDimension.updateDimensionTextPosition(camera)
-        depthDimension.updateDimensionTextPosition(camera)
+        if (widthDimension != undefined)
+            widthDimension.updateDimensionTextPosition(camera)
+        if (heightDimension != undefined)
+            heightDimension.updateDimensionTextPosition(camera)
+        if (depthDimension != undefined)
+            depthDimension.updateDimensionTextPosition(camera)
     }
 
     function showProgress()

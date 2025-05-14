@@ -119,10 +119,11 @@ class Dimension
         switch(type)
         {
             case TYPE.HEIGHT:
+                return [new THREE.Vector3(0, 0, 0), new THREE.Vector3(this.endLineSize, 0, 0)]
             case TYPE.DEPTH:
-                return [new THREE.Vector3(-this.endLineSize, 0, 0), new THREE.Vector3(this.endLineSize, 0, 0)]
+                return [new THREE.Vector3(-this.endLineSize, 0, 0), new THREE.Vector3(0, 0, 0)]
             case TYPE.WIDTH:
-                return [new THREE.Vector3(0, -this.endLineSize, 0), new THREE.Vector3(0, this.endLineSize, 0)]
+                return [new THREE.Vector3(0, 0, -this.endLineSize), new THREE.Vector3(0, 0, 0)]
         }
     }
 
