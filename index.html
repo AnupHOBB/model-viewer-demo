@@ -107,6 +107,39 @@
                 width: 8vh;
                 height: 8vh;
             }
+
+
+
+            @media screen and (max-aspect-ratio : 1.25)
+            {
+                p.dimension
+                {
+                    position: absolute;
+                    width: 12vw;
+                    height: 3vh;
+                    font-size: 2vh;
+                    text-align: center;
+                    padding-top: 1vh;
+                    color: white;
+                    background-color: black;
+                }
+            }
+
+            @media screen and (min-aspect-ratio : 1.25)
+            {
+                p.dimension
+                {
+                    position: absolute;
+                    width: 6vw;
+                    height: 3vh;
+                    max-width: 50px;
+                    font-size: 2vh;
+                    text-align: center;
+                    padding-top: 1vh;
+                    color: white;
+                    background-color: black;
+                }
+            }
         </style>
     </head>
     <body>

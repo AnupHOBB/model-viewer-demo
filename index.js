@@ -53,6 +53,10 @@ window.onload = () =>
     let loadingScreen = document.getElementById('loading-screen')
     let loadingText = document.getElementById('loading-text')
 
+    let widthDimension = new WidthDimension(scene, cameraPos.z)
+    let heightDimension = new HeightDimension(scene, cameraPos.z)
+    let depthDimension = new DepthDimension(scene, cameraPos.z)
+
     let gltfLoader = new GLTFLoader()
     gltfLoader.load(MODEL_PATH, model=>{
         hasModelLoaded = true
@@ -64,26 +68,21 @@ window.onload = () =>
             bound.setFromObject(model.scene)
             positionCamera(bound)
             
-            let widthDimension = new WidthDimension(scene, font, cameraPos.z)
             widthDimension.setSize(bound.max.x - bound.min.x)
             let width = (bound.max.x - bound.min.x).toFixed('2')
             widthDimension.setText(width+'')
             widthDimension.setZ(bound.max.z)
 
-            let heightDimension = new HeightDimension(scene, font, cameraPos.z)
-            let xOffsetHeight = heightDimension.planeSize.width * 0.75
             heightDimension.setSize(bound.max.y - bound.min.y)
             let height = (bound.max.y - bound.min.y).toFixed('2')
             heightDimension.setText(height+'')
-            heightDimension.setX(bound.min.x - xOffsetHeight)
+            heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
             heightDimension.setY((bound.max.y - bound.min.y)/2)
 
-            let depthDimension = new DepthDimension(scene, font, cameraPos.z)
-            let xOffsetDepth = depthDimension.planeSize.width * 0.75
             depthDimension.setSize(bound.max.z - bound.min.z)
             let depth = (bound.max.z - bound.min.z).toFixed('2')
             depthDimension.setText(depth+'')
-            depthDimension.setX(bound.max.x + xOffsetDepth)
+            depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2))
             depthDimension.setY(bound.min.y)
 
             document.body.removeChild(loadingScreen)
@@ -108,7 +107,9 @@ window.onload = () =>
         controls.update()
         directLight.position.set(camera.position.x, camera.position.y, camera.position.z)
         directLight.lookAt(new THREE.Vector3())
-
+        widthDimension.updateDimensionTextPosition(camera)
+        heightDimension.updateDimensionTextPosition(camera)
+        depthDimension.updateDimensionTextPosition(camera)
     }
 
     function showProgress()
