@@ -90,8 +90,6 @@ class Dimension
 
     setText(text) { this.dimensionText.innerText = text }
 
-    
-
     updateDimensionTextPosition(camera)
     {
         let worldPoint = new THREE.Vector3()

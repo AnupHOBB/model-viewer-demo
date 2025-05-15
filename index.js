@@ -98,22 +98,22 @@ window.onload = () =>
             
             widthDimension = new WidthDimension(scene, cameraPos.z)
             widthDimension.setSize(bound.max.x - bound.min.x)
-            let width = (bound.max.x - bound.min.x).toFixed('2')
-            widthDimension.setText(width+'')
+            let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
+            widthDimension.setText(width+' in')
             widthDimension.setX((bound.max.x + bound.min.x)/2)
             widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2))
 
             heightDimension = new HeightDimension(scene, cameraPos.z)
             heightDimension.setSize(bound.max.y - bound.min.y)
-            let height = (bound.max.y - bound.min.y).toFixed('2')
-            heightDimension.setText(height+'')
+            let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
+            heightDimension.setText(height+' in')
             heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
             heightDimension.setY((bound.max.y - bound.min.y)/2)
 
             depthDimension = new DepthDimension(scene, cameraPos.z)
             depthDimension.setSize(bound.max.z - bound.min.z)
-            let depth = (bound.max.z - bound.min.z).toFixed('2')
-            depthDimension.setText(depth+'')
+            let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
+            depthDimension.setText(depth+' in')
             depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2))
             depthDimension.setY(bound.min.y)
 
@@ -177,4 +177,6 @@ window.onload = () =>
             controls.target = cameraLookAt
         }
     }
+
+    function toInch(meter) { return meter * 39.36 }
 }
