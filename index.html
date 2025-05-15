@@ -83,7 +83,7 @@
                 }
             }
 
-            div#ar-container
+            div#button-container
             {
                 position: absolute;
                 top: 1%;
@@ -91,24 +91,33 @@
                 user-select: none;
             }
 
-            div#ar-button
+            div#buttons
             {
                 display: flex;
-                gap: 1vh;
-                padding-left: 1vh;
-                padding-right: 1vh;
-                background-color: #E3E7E9;
-                border-radius: 1vh;
+                gap: 1vw;
             }
 
-            img#ar-icon
+            div.button
             {
-                margin-top: 1vh;
-                width: 8vh;
-                height: 8vh;
+                background-color: #E3E7E9;
+                border-radius: 50%;
+                padding: 1vh;
             }
 
+            div.button-dotted
+            {
+                background-color: #E3E7E9;
+                border-color: black;
+                border-style: dotted;
+                border-width: 0.2ch;
+                border-radius: 50%;
+                padding: 1vh;
+            }
 
+            img.icon
+            {
+                width: 6vh;
+            }
 
             @media screen and (max-aspect-ratio : 1.25)
             {
@@ -158,9 +167,14 @@
                 <p id="qr-cross" class="cross-icon">X</p>
             </div>
         </div>
-        <div id="ar-container">
-            <div id="ar-button">
-                <img id="ar-icon" src="ar.png"/>
+        <div id="button-container">
+            <div id="buttons">
+                <div id="dimension-button" class="button-dotted">
+                    <img id="dimension-icon" class="icon" src="icons/dimension.png"/>
+                </div>
+                <div id="ar-button" class="button">
+                    <img id="ar-icon" class="icon" src="icons/ar.png"/>
+                </div>
             </div>
         </div>
         <div id="loading-screen"><div id="loading-text-container"><p id="loading-text">LOADING... 0%</p></div></div>

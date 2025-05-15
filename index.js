@@ -35,12 +35,44 @@ window.onload = () =>
     controls.enableZoom = false
 
     let hasModelLoaded = false
+    let isDimensionSelected = false
     let progressDots = 1
     let status = 0
+    let widthDimension
+    let heightDimension
+    let depthDimension
     let qrViewer = new QRViewer()
     
     let m = document.querySelector('model-viewer')
     m.src = MODEL_PATH
+
+    let dimensionIcon = document.getElementById('dimension-icon')
+    let dimensionButton = document.getElementById('dimension-button')
+    dimensionButton.addEventListener('click', e=>{
+        if (isDimensionSelected)
+        {
+            dimensionIcon.src = 'icons/dimension.png'
+            dimensionButton.style.backgroundColor = '#E3E7E9'
+            if (widthDimension != undefined)
+                widthDimension.hide()
+            if (heightDimension != undefined)
+                heightDimension.hide()
+            if (depthDimension != undefined)
+                depthDimension.hide()
+        }
+        else
+        {
+            dimensionIcon.src = 'icons/dimension-white.png'
+            dimensionButton.style.backgroundColor = 'black'
+            if (widthDimension != undefined)
+                widthDimension.show()
+            if (heightDimension != undefined)
+                heightDimension.show()
+            if (depthDimension != undefined)
+                depthDimension.show()
+        }
+        isDimensionSelected = !isDimensionSelected
+    })
      
     let arButton = document.getElementById('ar-button')
     arButton.addEventListener('click', e=>{
@@ -52,10 +84,6 @@ window.onload = () =>
 
     let loadingScreen = document.getElementById('loading-screen')
     let loadingText = document.getElementById('loading-text')
-
-    let widthDimension
-    let heightDimension
-    let depthDimension
 
     let gltfLoader = new GLTFLoader()
     gltfLoader.load(MODEL_PATH, model=>{

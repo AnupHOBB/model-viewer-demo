@@ -13,6 +13,7 @@ class Dimension
 {
     constructor(type, scene, cameraZ)
     {
+        this.isVisible = false
         this.type = type
         this.endLineSize = cameraZ * Math.tan(CAM_ANGLE_IN_RADIAN)
         this.dimension = new THREE.Group()
@@ -29,7 +30,7 @@ class Dimension
 
         this.dimensionText = document.createElement('p')
         this.dimensionText.className = 'dimension'
-        document.body.appendChild(this.dimensionText)
+        
 
         this.dimensionPoint = new THREE.Object3D()
         this.dimensionPoint.position.set((points[0].x + points[1].x)/2, (points[0].y + points[1].y)/2, (points[0].z + points[1].z)/2)
@@ -49,6 +50,8 @@ class Dimension
         this.dimension.attach(this.endLine2)
         
         scene.add(this.dimension)
+
+        this.dimension.visible = false
     }
 
     setX(x) { this.dimension.position.x = x }
@@ -87,6 +90,8 @@ class Dimension
 
     setText(text) { this.dimensionText.innerText = text }
 
+    
+
     updateDimensionTextPosition(camera)
     {
         let worldPoint = new THREE.Vector3()
@@ -99,6 +104,26 @@ class Dimension
         if (this.type == TYPE.DEPTH)
             top -= rect.height/2
         this.dimensionText.style.top = top+'px'
+    }
+
+    show()
+    {
+        if (!this.isVisible)
+        {
+            document.body.appendChild(this.dimensionText)
+            this.dimension.visible = true
+            this.isVisible = true
+        }
+    }
+
+    hide()
+    {
+        if (this.isVisible)
+        {
+            document.body.removeChild(this.dimensionText)
+            this.dimension.visible = false
+            this.isVisible = false
+        }
     }
     
     _getLinePoints(type)
