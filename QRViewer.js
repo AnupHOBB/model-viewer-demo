@@ -3,8 +3,6 @@ export class QRViewer
     constructor()
     {
         this.qrWindowElement = document.getElementById('qr-menu')
-        let backButtonElement = document.getElementById('qr-back')
-        backButtonElement.addEventListener('click', e=>this.hide())
         let crossButtonElement = document.getElementById('qr-cross')
         crossButtonElement.addEventListener('click', e=>this.hide())
         this.qrContainerElement = document.getElementById('qr')

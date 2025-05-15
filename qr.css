@@ -2,14 +2,14 @@
 
 .cross-icon 
 {
-    position: absolute;
-    margin-top: 0%;
-    top: 1%;
-    right: 2%;
-    font-family: 'Roboto';
-    font-size: 4vh;
-    color: red;
+    width: 4vh;
     user-select: none;
+    padding: 1vh;
+    background-color: #E3E7E9;
+    border-radius: 50%;
+    border-color: black;
+    border-width: 0.1ch;
+    border-style: solid;
 }
 
 @media screen and (max-aspect-ratio : 1)
@@ -21,7 +21,8 @@
         left: 0%;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
         z-index: 5;
     }
 }
@@ -31,63 +32,27 @@
     #qr-menu
     {
         position: absolute;
-        top: 1%;
+        top: 0%;
         left: 0%;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
         z-index: 5;
     }
 }
 
-@media screen and (max-aspect-ratio : 1) and (max-width: 500px)
+@media screen and (max-aspect-ratio : 1)
 {
     #qr-menu-inner
     {
-        position: absolute;
-        top: 10%;
-        left: 10%;
+        display: block;
+        margin: auto;
+        margin-top: 15vh;
+        padding-bottom: 5vh;
         width: 80%;
-        height: 50vh;
-        background-color: #E3E7E9; 
-        border-radius: 1.5ch;
-        border-width: 0.25ch;
-        border-style: solid;
-        border-color: black;
-    }
-}
-
-@media screen and (max-aspect-ratio : 1) and (min-width: 500px) and (max-width: 700px)
-{
-    #qr-menu-inner
-    {
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 70vh;
-        background-color: #E3E7E9; 
-        border-radius: 1.5ch;
-        border-width: 0.25ch;
-        border-style: solid;
-        border-color: black;
-    }
-}
-
-@media screen and (max-aspect-ratio : 1) and (min-width: 700px)
-{
-    #qr-menu-inner
-    {
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 85vh;
-        background-color: #E3E7E9; 
-        border-radius: 1.5ch;
-        border-width: 0.25ch;
-        border-style: solid;
-        border-color: black;
+        background-color: white; 
+        border-radius: 4ch;
     }
 }
 
@@ -95,16 +60,15 @@
 {
     #qr-menu-inner
     {
-        position: absolute;
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 80%;
-        background-color: #E3E7E9; 
-        border-radius: 1.5ch;
-        border-width: 0.25ch;
-        border-style: solid;
-        border-color: black;
+        display: block;
+        margin: auto;
+        margin-top: 10vh;
+        padding-bottom: 10vh;
+        width: 70%;
+        height: 70%;
+        max-width: 600px;
+        background-color: white; 
+        border-radius: 4ch;
     }
 }
 
@@ -136,11 +100,10 @@
         margin: auto;
         padding-top: 2%;
         width: 110vh;
-        background-color: rgb(0, 0, 0, 0); 
-        text-align: center;
+        background-color: rgb(0, 0, 0, 0);
         color: black;
         font-family: 'Roboto';
-        font-size: 4.5vh;
+        font-size: 5vh;
         font-weight: bold;
         border-bottom-left-radius: 1ch;
         border-bottom-right-radius: 1ch;
@@ -156,11 +119,10 @@
         margin: auto;
         padding-top: 2%;
         width: 70vh;
-        background-color: rgb(0, 0, 0, 0); 
-        text-align: center;
+        background-color: rgb(0, 0, 0, 0);
         color: black;
         font-family: 'Roboto';
-        font-size: 3vh;
+        font-size: 6vh;
         font-weight: bold;
         border-bottom-left-radius: 1ch;
         border-bottom-right-radius: 1ch;
@@ -168,29 +130,7 @@
     }
 }
 
-@media screen and (max-aspect-ratio : 1)
-{
-    #qr-container
-    {
-        position: absolute;
-        top: 15%;
-        left: 0%;
-        width: 100%;
-        height: 50%;
-    }
-}
-
-@media screen and (min-aspect-ratio : 1)
-{
-    #qr-container
-    {
-        position: absolute;
-        top: 25%;
-        left: 0%;
-        width: 100%;
-        height: 50%;
-    }
-}
+#qr-container { width: 100%; }
 
 @media screen and (max-aspect-ratio : 1)
 {
@@ -213,121 +153,12 @@
     { 
         display: block;
         margin: auto;
-        height: 100%;
+        width: 50vh;
+        height: 50vh;
         border-radius: 1.5ch;
         border-width: 0.25ch;
         border-style: solid;
         border-color: black;
         user-select: none;
     }
-}
-
-.dialog-back-container 
-{
-    position: absolute;
-    bottom: 5%;
-    width: 100%;
-}
-
-@media screen and (max-aspect-ratio : 1) and (max-height: 500px) 
-{
-    .dialog-back 
-    {
-        display: block;
-        margin: auto;
-        width: 10vh;
-        padding: 1ch;
-        background-color: white;
-        text-align: center;
-        color: black;
-        font-family: 'Roboto';
-        font-size: 2vh;
-        font-weight: bold;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 8ch;
-        border-style: solid;
-        border-color: black;
-        border-width: 0.1ch;
-        user-select: none;
-    }
-}
-
-@media screen and (max-aspect-ratio : 1) and (min-height: 500px) 
-{
-    .dialog-back 
-    {
-        display: block;
-        margin: auto;
-        width: 20vh;
-        padding: 1ch;
-        background-color: white;
-        text-align: center;
-        color: black;
-        font-family: 'Roboto';
-        font-size: 2vh;
-        font-weight: bold;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 8ch;
-        border-style: solid;
-        border-color: black;
-        border-width: 0.1ch;
-        user-select: none;
-    }
-}
-
-@media screen and (min-aspect-ratio : 1) and (max-height: 600px) 
-{
-    .dialog-back 
-    {
-        display: block;
-        margin: auto;
-        width: 10vh;
-        padding: 1ch;
-        background-color: white;
-        text-align: center;
-        color: black;
-        font-family: 'Roboto';
-        font-size: 2vh;
-        font-weight: bold;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 8ch;
-        border-style: solid;
-        border-color: black;
-        border-width: 0.1ch;
-        user-select: none;
-    }
-}
-
-@media screen and (min-aspect-ratio : 1) and (min-height: 600px) 
-{
-    .dialog-back 
-    {
-        display: block;
-        margin: auto;
-        width: 20vh;
-        padding: 1ch;
-        background-color: white;
-        text-align: center;
-        color: black;
-        font-family: 'Roboto';
-        font-size: 2vh;
-        font-weight: bold;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 8ch;
-        border-style: solid;
-        border-color: black;
-        border-width: 0.1ch;
-        user-select: none;
-    }
-}
-
-.dialog-back:hover 
-{
-    color: white;
-    background-color: #00A3FF;
-    border-color: #00A3FF;
 }
