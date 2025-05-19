@@ -17,11 +17,7 @@ class Dimension
         this.type = type
         this.endLineSize = cameraZ * Math.tan(CAM_ANGLE_IN_RADIAN)
         this.dimension = new THREE.Group()
-        this.lineMaterial = new THREE.LineBasicMaterial({
-            color: new THREE.Color(1, 0, 0), 
-            vertexColors: true, 
-            linewidth: 1
-        })
+        this.lineMaterial = new THREE.LineBasicMaterial({color: new THREE.Color(0, 163/255, 1)})
         this.lineMaterial.linewidth = 1
         this.lineMaterial.worldUnits = true
         this.lineMaterial.needsUpdate = true
@@ -31,7 +27,6 @@ class Dimension
         this.dimensionText = document.createElement('p')
         this.dimensionText.className = 'dimension'
         
-
         this.dimensionPoint = new THREE.Object3D()
         this.dimensionPoint.position.set((points[0].x + points[1].x)/2, (points[0].y + points[1].y)/2, (points[0].z + points[1].z)/2)
         this._attach(this.dimensionPoint)

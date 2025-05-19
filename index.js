@@ -63,7 +63,7 @@ window.onload = () =>
         else
         {
             dimensionIcon.src = 'icons/dimension-white.png'
-            dimensionButton.style.backgroundColor = 'black'
+            dimensionButton.style.backgroundColor = '#00A3FF'
             if (widthDimension != undefined)
                 widthDimension.show()
             if (heightDimension != undefined)
