@@ -51,8 +51,7 @@ window.onload = () =>
     dimensionButton.addEventListener('click', e=>{
         if (isDimensionSelected)
         {
-            dimensionIcon.src = 'icons/dimension.png'
-            dimensionButton.style.backgroundColor = '#E3E7E9'
+            dimensionButton.className = 'button-dotted'
             if (widthDimension != undefined)
                 widthDimension.hide()
             if (heightDimension != undefined)
@@ -63,7 +62,7 @@ window.onload = () =>
         else
         {
             dimensionIcon.src = 'icons/dimension-white.png'
-            dimensionButton.style.backgroundColor = '#00A3FF'
+            dimensionButton.className = 'button-dotted-selected'
             if (widthDimension != undefined)
                 widthDimension.show()
             if (heightDimension != undefined)
@@ -73,7 +72,18 @@ window.onload = () =>
         }
         isDimensionSelected = !isDimensionSelected
     })
+
+    dimensionButton.addEventListener('mouseenter', e=>{
+        if (!isDimensionSelected)
+            dimensionIcon.src = 'icons/dimension-white.png' 
+    })
+
+    dimensionButton.addEventListener('mouseleave', e=>{
+        if (!isDimensionSelected)
+            dimensionIcon.src = 'icons/dimension.png'
+    })
      
+    let arIcon = document.getElementById('ar-icon')
     let arButton = document.getElementById('ar-button')
     arButton.addEventListener('click', e=>{
         if (m.canActivateAR)
@@ -81,6 +91,9 @@ window.onload = () =>
         else
             qrViewer.show()
     })
+
+    arButton.addEventListener('mouseenter', e=>{arIcon.src = 'icons/ar-white.png'})
+    arButton.addEventListener('mouseleave', e=>{arIcon.src = 'icons/ar.png'})
 
     let loadingScreen = document.getElementById('loading-screen')
     let loadingText = document.getElementById('loading-text')
