@@ -3,8 +3,10 @@ export class QRViewer
     constructor()
     {
         this.qrWindowElement = document.getElementById('qr-menu')
-        let crossButtonElement = document.getElementById('qr-cross')
-        crossButtonElement.addEventListener('click', e=>this.hide())
+        this.crossButtonElement = document.getElementById('qr-cross')
+        this.crossButtonElement.addEventListener('click', e=>this.hide())
+        this.crossButtonElement.addEventListener('mouseenter', e=>{this.crossButtonElement.src = 'icons/cross-white.png'})
+        this.crossButtonElement.addEventListener('mouseleave', e=>{this.crossButtonElement.src = 'icons/cross.png'})
         this.qrContainerElement = document.getElementById('qr')
         new QRCode(this.qrContainerElement, this.extractOrigin(window.location.href))
         document.body.removeChild(this.qrWindowElement)
@@ -25,6 +27,7 @@ export class QRViewer
         if (this.isVisible)
         {
             document.body.removeChild(this.qrWindowElement)
+            this.crossButtonElement.src = 'icons/cross.png'
             this.isVisible = false
         }
     }

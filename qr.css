@@ -13,7 +13,7 @@
         background-color: #E3E7E9;
         border-radius: 50%;
         border-color: #00A3FF;
-        border-width: 0.1ch;
+        border-width: 0.25ch;
         border-style: solid;
     }
 }
@@ -31,9 +31,14 @@
         background-color: #E3E7E9;
         border-radius: 50%;
         border-color: #00A3FF;
-        border-width: 0.1ch;
+        border-width: 0.25ch;
         border-style: solid;
     }
+}
+
+.cross-icon:hover
+{
+    background-color: #00A3FF;
 }
 
 @media screen and (max-aspect-ratio : 1)
