@@ -1,4 +1,7 @@
 import * as THREE from 'three'
+import {LineMaterial} from 'line-material'
+import {LineGeometry} from 'line-geometry'
+import {Line2} from 'line2'
 
 const CAM_ANGLE_IN_RADIAN = 0.024994793618920156
 
@@ -17,9 +20,8 @@ class Dimension
         this.type = type
         this.endLineSize = cameraZ * Math.tan(CAM_ANGLE_IN_RADIAN)
         this.dimension = new THREE.Group()
-        this.lineMaterial = new THREE.LineBasicMaterial({color: new THREE.Color(0, 163/255, 1)})
-        this.lineMaterial.linewidth = 1
-        this.lineMaterial.worldUnits = true
+        this.lineMaterial = new LineMaterial({color: new THREE.Color(0, 163/255, 1)})
+        this.lineMaterial.linewidth = 2
         this.lineMaterial.needsUpdate = true
     
         const points = this._getLinePoints(type)
@@ -31,17 +33,17 @@ class Dimension
         this.dimensionPoint.position.set((points[0].x + points[1].x)/2, (points[0].y + points[1].y)/2, (points[0].z + points[1].z)/2)
         this._attach(this.dimensionPoint)
 
-        this.lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-        this.line = new THREE.Line(this.lineGeometry, this.lineMaterial)
+        this.lineGeometry = new LineGeometry().setFromPoints(points)
+        this.line = new Line2(this.lineGeometry, this.lineMaterial)
         this.line.computeLineDistances()
         this.dimension.attach(this.line)
     
         this.endPoints = this._getEndPoints(type)
-        this.endLineGeometry = new THREE.BufferGeometry().setFromPoints(this.endPoints)
-        this.endLine1 = new THREE.Line(this.endLineGeometry, this.lineMaterial)
+        this.endLineGeometry = new LineGeometry().setFromPoints(this.endPoints)
+        this.endLine1 = new Line2(this.endLineGeometry, this.lineMaterial)
         this.dimension.attach(this.endLine1)
         
-        this.endLine2 = new THREE.Line(this.endLineGeometry, this.lineMaterial)
+        this.endLine2 = new Line2(this.endLineGeometry, this.lineMaterial)
         this.dimension.attach(this.endLine2)
         
         scene.add(this.dimension)
