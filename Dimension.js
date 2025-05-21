@@ -20,7 +20,7 @@ class Dimension
         this.type = type
         this.endLineSize = cameraZ * Math.tan(CAM_ANGLE_IN_RADIAN)
         this.dimension = new THREE.Group()
-        this.lineMaterial = new LineMaterial({color: new THREE.Color(0, 163/255, 1)})
+        this.lineMaterial = new LineMaterial({color: this._toGammaCorrected(new THREE.Color(0, 163/255, 1), 0.455)})
         this.lineMaterial.linewidth = 2
         this.lineMaterial.needsUpdate = true
     
@@ -168,6 +168,8 @@ class Dimension
             }
         }
     }
+
+    _toGammaCorrected(color, gamma) { return new THREE.Color(Math.pow(color.r, 1/gamma), Math.pow(color.g, 1/gamma), Math.pow(color.b, 1/gamma)) }
 }
 
 export class HeightDimension extends Dimension { constructor(scene, cameraZ) { super(TYPE.HEIGHT, scene, cameraZ) } }
