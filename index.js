@@ -6,6 +6,8 @@ import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
 const MODEL_PATH = 'assets/SparklingSpringWater01234_28oz_M.glb'
+const CUBE_MAP_NAMES = ['px.png','nx.png','py.png','ny.png','pz.png','nz.png']
+const CUBE_MAP_FOLDER = 'cubemaps/' 
 
 window.onload = () =>
 {
@@ -103,34 +105,37 @@ window.onload = () =>
         hasModelLoaded = true
         const loader = new FontLoader();
         loader.load( 'Roobert_Medium_Regular.json', function (font) {
-            status = 100
+            status = 99
             scene.add(model.scene)
             let bound = new THREE.Box3()
             bound.setFromObject(model.scene)
             positionCamera(bound)
-            
-            widthDimension = new WidthDimension(scene, cameraPos.z)
-            widthDimension.setSize(bound.max.x - bound.min.x)
-            let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
-            widthDimension.setText(width+' in')
-            widthDimension.setX((bound.max.x + bound.min.x)/2)
-            widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2))
+            new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
+                status = 100
+                applyEnvMap(model.scene, cubeTexture)
+                widthDimension = new WidthDimension(scene, cameraPos.z)
+                widthDimension.setSize(bound.max.x - bound.min.x)
+                let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
+                widthDimension.setText(width+' in')
+                widthDimension.setX((bound.max.x + bound.min.x)/2)
+                widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2))
 
-            heightDimension = new HeightDimension(scene, cameraPos.z)
-            heightDimension.setSize(bound.max.y - bound.min.y)
-            let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
-            heightDimension.setText(height+' in')
-            heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
-            heightDimension.setY((bound.max.y - bound.min.y)/2)
+                heightDimension = new HeightDimension(scene, cameraPos.z)
+                heightDimension.setSize(bound.max.y - bound.min.y)
+                let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
+                heightDimension.setText(height+' in')
+                heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
+                heightDimension.setY((bound.max.y - bound.min.y)/2)
 
-            depthDimension = new DepthDimension(scene, cameraPos.z)
-            depthDimension.setSize(bound.max.z - bound.min.z)
-            let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
-            depthDimension.setText(depth+' in')
-            depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2))
-            depthDimension.setY(bound.min.y)
+                depthDimension = new DepthDimension(scene, cameraPos.z)
+                depthDimension.setSize(bound.max.z - bound.min.z)
+                let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
+                depthDimension.setText(depth+' in')
+                depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2))
+                depthDimension.setY(bound.min.y)
 
-            document.body.removeChild(loadingScreen)
+                document.body.removeChild(loadingScreen)
+            })
         })
     }, p=>{
         status = (p.loaded/p.total) * 99
@@ -192,4 +197,18 @@ window.onload = () =>
     }
 
     function toInch(meter) { return meter * 39.36 }
+
+    function applyEnvMap(threeJsObject, envMap)
+    {
+        if (threeJsObject.isMesh)
+        {    
+            threeJsObject.material.envMap = envMap
+            threeJsObject.material.envMapIntensity = 1
+        }
+        else if (threeJsObject.children.length > 0)
+        {
+            for (let i=0; i<threeJsObject.children.length; i++)   
+                applyEnvMap(threeJsObject.children[i], envMap)
+        }
+    }
 }
