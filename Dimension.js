@@ -85,7 +85,11 @@ class Dimension
         }
     }
 
-    setText(text) { this.dimensionText.innerText = text }
+    setText(text) 
+    { 
+        this.dimensionText.innerText = text
+        this.dimensionText.style.width = this._calculateTextWidth(text)
+    }
 
     updateDimensionTextPosition(camera)
     {
@@ -99,6 +103,7 @@ class Dimension
         if (this.type == TYPE.DEPTH)
             top -= rect.height/2
         this.dimensionText.style.top = top+'px'
+        this.dimensionText.style.width = this._calculateTextWidth(this.dimensionText.innerText)
     }
 
     show()
@@ -167,6 +172,14 @@ class Dimension
                 object3D.parent = null
             }
         }
+    }
+
+    _calculateTextWidth(value)
+    {
+        let valueBeforeDecimal = value.split('.')[0]
+        let startWidth = (window.innerWidth/window.innerHeight) < 1.25 ? 6 : 2
+        let width = startWidth * valueBeforeDecimal.length
+        return width+'vw'
     }
 
     _toGammaCorrected(color, gamma) { return new THREE.Color(Math.pow(color.r, 1/gamma), Math.pow(color.g, 1/gamma), Math.pow(color.b, 1/gamma)) }
