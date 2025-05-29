@@ -31,10 +31,11 @@ window.onload = () =>
     const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true})
     renderer.setPixelRatio(2)
     const controls = new OrbitControls(camera, renderer.domElement )
+    controls.enableDamping = true
+    controls.dampingFactor = 0.2
     
     controls.update()
     controls.enablePan = false
-    controls.enableZoom = false
 
     let hasModelLoaded = false
     let isDimensionSelected = false
