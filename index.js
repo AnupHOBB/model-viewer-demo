@@ -13,21 +13,28 @@ window.onload = () =>
     let cameraPos = new THREE.Vector3(0.01, 0.05, 0.4)
     let cameraLookAt = new THREE.Vector3()
     const scene = new THREE.Scene();
-    let bgColor = 0.75
+    let bgColor = 0.92
     scene.background = new THREE.Color(bgColor, bgColor, bgColor)
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000)
     camera.position.set(cameraPos.x, cameraPos.y, cameraPos.z)
-    const hemiLight = new THREE.HemisphereLight('#ffffff', '#000000', 0.975)
+    const hemiLight = new THREE.HemisphereLight('#ffffff', '#000000', 2)
     scene.add(hemiLight)
-    const directLight = new THREE.DirectionalLight('#ffffff', 0.025)
-    directLight.position.set(0, 0.05, 100)
+    const directLight = new THREE.DirectionalLight('#ffffff', 2)
+    directLight.castShadow = true
+    directLight.shadow.camera.far = 2000
+    directLight.shadow.mapSize.set(128, 128)
     const directLightTarget = new THREE.Object3D()
-    directLightTarget.position.set(0, 0.5, 0)
     scene.add(directLightTarget)
     directLight.target = directLightTarget
     scene.add(directLight)
+    const plane = new THREE.Mesh(new THREE.BoxGeometry(100, 0.01, 100), new THREE.ShadowMaterial({color: 0xbbbbbb}))
+    plane.receiveShadow = true
+    scene.add(plane)
+
     let canvas = document.querySelector('canvas')
     const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true})
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.setPixelRatio(2)
     const controls = new OrbitControls(camera, renderer.domElement )
     controls.enableDamping = true
@@ -107,11 +114,20 @@ window.onload = () =>
             scene.add(model.scene)
             let bound = new THREE.Box3()
             bound.setFromObject(model.scene)
+            directLight.position.set(0, bound.max.y + ((bound.max.y + bound.min.y)/2), 0)
             model.scene.position.set(-((bound.max.x + bound.min.x)/2), 0, -((bound.max.z + bound.min.z)/2))
             positionCamera(bound)
             new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
                 status = 100
-                applyEnvMap(model.scene, cubeTexture)
+                iterateModel(model.scene, threeJsObject => {
+                    if (threeJsObject.isMesh)
+                    {    
+                        threeJsObject.material.envMap = cubeTexture
+                        threeJsObject.material.envMapIntensity = 1
+                        threeJsObject.castShadow = true
+                        threeJsObject.receiveShadow = true
+                    }
+                })
                 widthDimension = new WidthDimension(scene, cameraPos.z)
                 widthDimension.setSize(bound.max.x - bound.min.x)
                 let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
@@ -155,14 +171,13 @@ window.onload = () =>
         renderer.setSize(window.innerWidth, window.innerHeight)
         renderer.render(scene, camera)
         controls.update()
-        directLight.position.set(camera.position.x, camera.position.y, camera.position.z)
-        directLight.lookAt(new THREE.Vector3())
         if (widthDimension != undefined)
             widthDimension.updateDimensionTextPosition(camera)
         if (heightDimension != undefined)
             heightDimension.updateDimensionTextPosition(camera)
         if (depthDimension != undefined)
             depthDimension.updateDimensionTextPosition(camera)
+        plane.receiveShadow = camera.position.y > plane.position.y
     }
 
     function showProgress()
@@ -198,17 +213,13 @@ window.onload = () =>
 
     function toInch(meter) { return meter * 39.36 }
 
-    function applyEnvMap(threeJsObject, envMap)
+    function iterateModel(node, onNodeReach = n => {})
     {
-        if (threeJsObject.isMesh)
-        {    
-            threeJsObject.material.envMap = envMap
-            threeJsObject.material.envMapIntensity = 1
-        }
-        else if (threeJsObject.children.length > 0)
+        onNodeReach(node)
+        if (node.children.length > 0)
         {
-            for (let i=0; i<threeJsObject.children.length; i++)   
-                applyEnvMap(threeJsObject.children[i], envMap)
+            for (let i=0; i<node.children.length; i++)   
+                iterateModel(node.children[i], onNodeReach)
         }
     }
 }
