@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'orbit'
 import { GLTFLoader } from 'gltf-loader'
-import { FontLoader } from 'font-loader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
@@ -104,12 +103,11 @@ window.onload = () =>
     let gltfLoader = new GLTFLoader()
     gltfLoader.load(MODEL_PATH, model=>{
         hasModelLoaded = true
-        const loader = new FontLoader();
-        loader.load( 'Roobert_Medium_Regular.json', function (font) {
-            status = 99
+        status = 99
             scene.add(model.scene)
             let bound = new THREE.Box3()
             bound.setFromObject(model.scene)
+            model.scene.position.set(-((bound.max.x + bound.min.x)/2), 0, -((bound.max.z + bound.min.z)/2))
             positionCamera(bound)
             new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
                 status = 100
@@ -139,7 +137,6 @@ window.onload = () =>
 
                 document.body.removeChild(loadingScreen)
             })
-        })
     }, p=>{
         status = (p.loaded/p.total) * 99
         status = Math.trunc(status)
