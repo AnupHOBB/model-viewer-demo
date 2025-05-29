@@ -20,14 +20,11 @@ window.onload = () =>
     const hemiLight = new THREE.HemisphereLight('#ffffff', '#000000', 2)
     scene.add(hemiLight)
     const directLight = new THREE.DirectionalLight('#ffffff', 2)
-    directLight.castShadow = true
-    directLight.shadow.camera.far = 2000
-    directLight.shadow.mapSize.set(128, 128)
     const directLightTarget = new THREE.Object3D()
     scene.add(directLightTarget)
     directLight.target = directLightTarget
     scene.add(directLight)
-    const plane = new THREE.Mesh(new THREE.BoxGeometry(100, 0.01, 100), new THREE.ShadowMaterial({color: 0xbbbbbb}))
+    const plane = new THREE.Mesh(new THREE.BoxGeometry(1, 0.01, 1), new THREE.ShadowMaterial({color: 0xbbbbbb}))
     plane.receiveShadow = true
     scene.add(plane)
 
@@ -114,8 +111,29 @@ window.onload = () =>
             scene.add(model.scene)
             let bound = new THREE.Box3()
             bound.setFromObject(model.scene)
-            directLight.position.set(0, bound.max.y + ((bound.max.y + bound.min.y)/2), 0)
-            model.scene.position.set(-((bound.max.x + bound.min.x)/2), 0, -((bound.max.z + bound.min.z)/2))
+            let lightDistance = bound.max.y + ((bound.max.y + bound.min.y)/2)
+            if (lightDistance < 1)
+                lightDistance = 1
+            directLight.position.set(0, lightDistance, 0)
+            let deltaX = -((bound.max.x + bound.min.x)/2)
+            let deltaZ = -((bound.max.z + bound.min.z)/2)
+            model.scene.position.set(deltaX, 0, deltaZ)
+            let planeX = (bound.max.x - bound.min.x) * 2
+            if (planeX < 10)
+                planeX = 10
+            let planeZ = (bound.max.z - bound.min.z) * 2
+            if (planeZ < 10)
+                planeZ = 10
+            plane.scale.set(planeX, 1, planeZ)
+            let radAngle = THREE.MathUtils.degToRad(60)
+            directLight.castShadow = true
+            let limit = lightDistance * Math.tan(radAngle)
+            directLight.shadow.camera.left = -limit
+            directLight.shadow.camera.right = limit
+            directLight.shadow.camera.bottom = -limit
+            directLight.shadow.camera.top = limit
+            directLight.shadow.camera.far = 2000
+            directLight.shadow.mapSize.set(128, 128)
             positionCamera(bound)
             new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
                 status = 100
@@ -132,24 +150,21 @@ window.onload = () =>
                 widthDimension.setSize(bound.max.x - bound.min.x)
                 let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
                 widthDimension.setText(width+' in')
-                widthDimension.setX((bound.max.x + bound.min.x)/2)
-                widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2))
+                widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2) + deltaZ)
 
                 heightDimension = new HeightDimension(scene, cameraPos.z)
                 heightDimension.setSize(bound.max.y - bound.min.y)
                 let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
                 heightDimension.setText(height+' in')
-                heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2))
+                heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2) + deltaX)
                 heightDimension.setY((bound.max.y - bound.min.y)/2)
-                heightDimension.setZ((bound.max.z + bound.min.z)/2)
 
                 depthDimension = new DepthDimension(scene, cameraPos.z)
                 depthDimension.setSize(bound.max.z - bound.min.z)
                 let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
                 depthDimension.setText(depth+' in')
-                depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2))
+                depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2) + deltaX)
                 depthDimension.setY(bound.min.y)
-                depthDimension.setZ((bound.max.z + bound.min.z)/2)
 
                 document.body.removeChild(loadingScreen)
             })
