@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'orbit'
 import { GLTFLoader } from 'gltf-loader'
+import { EffectComposer } from 'composer'
+import { RenderPass } from 'render'
+import { SSAOPass } from 'ssao'
+import { OutputPass } from 'output'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
@@ -33,6 +37,22 @@ window.onload = () =>
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.setPixelRatio(2)
+
+    const composer = new EffectComposer(renderer)
+
+    const renderPass = new RenderPass(scene, camera)
+    composer.addPass(renderPass)
+
+    const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
+    ssaoPass.kernelRadius = 0.115
+    ssaoPass.output = SSAOPass.OUTPUT.Default
+    ssaoPass.minDistance = 0.00004
+    ssaoPass.maxDistance = 0.1
+    composer.addPass(ssaoPass)
+
+    const outputPass = new OutputPass()
+    composer.addPass(outputPass)
+
     const controls = new OrbitControls(camera, renderer.domElement )
     controls.enableDamping = true
     controls.dampingFactor = 0.2
@@ -109,6 +129,7 @@ window.onload = () =>
         hasModelLoaded = true
         status = 99
             scene.add(model.scene)
+            ssaoPass.scene = model.scene
             let bound = new THREE.Box3()
             bound.setFromObject(model.scene)
             let lightDistance = bound.max.y + ((bound.max.y + bound.min.y)/2)
@@ -184,7 +205,8 @@ window.onload = () =>
         camera.aspect = window.innerWidth/window.innerHeight
         camera.updateProjectionMatrix()
         renderer.setSize(window.innerWidth, window.innerHeight)
-        renderer.render(scene, camera)
+        composer.setSize(window.innerWidth, window.innerHeight)
+        composer.render()
         controls.update()
         if (widthDimension != undefined)
             widthDimension.updateDimensionTextPosition(camera)
