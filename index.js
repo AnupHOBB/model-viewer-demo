@@ -2,9 +2,11 @@ import * as THREE from 'three'
 import { OrbitControls } from 'orbit'
 import { GLTFLoader } from 'gltf-loader'
 import { EffectComposer } from 'composer'
-import { RenderPass } from 'render'
-import { SSAOPass } from 'ssao'
-import { OutputPass } from 'output'
+import { RenderPass } from 'render-pass'
+import { SSAOPass } from 'ssao-pass'
+import { OutputPass } from 'output-pass'
+import { ShaderPass } from 'shader-pass'
+import { FXAAShader } from 'fxaa-shader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
@@ -52,6 +54,9 @@ window.onload = () =>
 
     const outputPass = new OutputPass()
     composer.addPass(outputPass)
+
+    const fxaaPass = new ShaderPass(new THREE.ShaderMaterial(FXAAShader))
+    composer.addPass(fxaaPass)
 
     const controls = new OrbitControls(camera, renderer.domElement )
     controls.enableDamping = true
@@ -206,6 +211,8 @@ window.onload = () =>
         camera.updateProjectionMatrix()
         renderer.setSize(window.innerWidth, window.innerHeight)
         composer.setSize(window.innerWidth, window.innerHeight)
+        fxaaPass.material.uniforms['resolution'].value.x = 1/(window.innerWidth * renderer.getPixelRatio())
+        fxaaPass.material.uniforms['resolution'].value.y = 1/(window.innerHeight * renderer.getPixelRatio())
         composer.render()
         controls.update()
         if (widthDimension != undefined)
