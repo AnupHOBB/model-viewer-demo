@@ -178,7 +178,8 @@ class Dimension
     {
         let valueBeforeDecimal = value.split('.')[0]
         let startWidth = (window.innerWidth/window.innerHeight) < 1.25 ? 6 : 2
-        let width = startWidth * valueBeforeDecimal.length
+        let length = valueBeforeDecimal.length == 1 ? 2 : valueBeforeDecimal.length
+        let width = startWidth * length
         return width+'vw'
     }
 

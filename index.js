@@ -46,7 +46,7 @@ window.onload = () =>
     composer.addPass(renderPass)
 
     const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
-    ssaoPass.kernelRadius = 0.115
+    ssaoPass.kernelRadius = 0.05
     ssaoPass.output = SSAOPass.OUTPUT.Default
     ssaoPass.minDistance = 0.00004
     ssaoPass.maxDistance = 0.1
