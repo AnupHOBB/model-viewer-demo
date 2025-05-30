@@ -23,9 +23,9 @@ window.onload = () =>
     scene.background = new THREE.Color(bgColor, bgColor, bgColor)
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000)
     camera.position.set(cameraPos.x, cameraPos.y, cameraPos.z)
-    const hemiLight = new THREE.HemisphereLight('#ffffff', '#000000', 2)
+    const hemiLight = new THREE.HemisphereLight('#ffffff', '#000000', 3)
     scene.add(hemiLight)
-    const directLight = new THREE.DirectionalLight('#ffffff', 2)
+    const directLight = new THREE.DirectionalLight('#ffffff', 1)
     const directLightTarget = new THREE.Object3D()
     scene.add(directLightTarget)
     directLight.target = directLightTarget
