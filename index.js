@@ -35,6 +35,9 @@ window.onload = () =>
     plane.receiveShadow = true
     scene.add(plane)
 
+    let m = document.querySelector('model-viewer')
+    m.src = MODEL_PATH
+
     let canvas = document.querySelector('canvas')
     const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true})
     renderer.shadowMap.enabled = true
@@ -42,13 +45,17 @@ window.onload = () =>
     renderer.setPixelRatio(2)
 
     const composer = new EffectComposer(renderer)
-
-    const renderPass = new RenderPass(scene, camera)
-    //composer.addPass(renderPass)
-    const ssaaRenderPass = new SSAARenderPass(scene, camera)
-    ssaaRenderPass.sampleLevel = 3
-    composer.addPass(ssaaRenderPass)
-
+    if (m.canActivateAR)
+    {
+        const renderPass = new RenderPass(scene, camera)
+        composer.addPass(renderPass)
+    }
+    else
+    {
+        const ssaaRenderPass = new SSAARenderPass(scene, camera)
+        ssaaRenderPass.sampleLevel = 3
+        composer.addPass(ssaaRenderPass)
+    }
     const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
     ssaoPass.kernelRadius = 0.05
     ssaoPass.output = SSAOPass.OUTPUT.Default
@@ -77,9 +84,6 @@ window.onload = () =>
     let heightDimension
     let depthDimension
     let qrViewer = new QRViewer()
-    
-    let m = document.querySelector('model-viewer')
-    m.src = MODEL_PATH
 
     let dimensionIcon = document.getElementById('dimension-icon')
     let dimensionButton = document.getElementById('dimension-button')
