@@ -45,17 +45,9 @@ window.onload = () =>
     renderer.setPixelRatio(2)
 
     const composer = new EffectComposer(renderer)
-    if (m.canActivateAR)
-    {
-        const renderPass = new RenderPass(scene, camera)
-        composer.addPass(renderPass)
-    }
-    else
-    {
-        const ssaaRenderPass = new SSAARenderPass(scene, camera)
-        ssaaRenderPass.sampleLevel = 3
-        composer.addPass(ssaaRenderPass)
-    }
+    const renderPass = new RenderPass(scene, camera)
+    composer.addPass(renderPass)
+
     const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
     ssaoPass.kernelRadius = 0.05
     ssaoPass.output = SSAOPass.OUTPUT.Default
@@ -141,67 +133,76 @@ window.onload = () =>
     gltfLoader.load(MODEL_PATH, model=>{
         hasModelLoaded = true
         status = 99
-            scene.add(model.scene)
-            ssaoPass.scene = model.scene
-            let bound = new THREE.Box3()
-            bound.setFromObject(model.scene)
-            let lightDistance = bound.max.y + ((bound.max.y + bound.min.y)/2)
-            if (lightDistance < 1)
-                lightDistance = 1
-            directLight.position.set(0, lightDistance, 0)
-            let deltaX = -((bound.max.x + bound.min.x)/2)
-            let deltaZ = -((bound.max.z + bound.min.z)/2)
-            model.scene.position.set(deltaX, 0, deltaZ)
-            let planeX = (bound.max.x - bound.min.x) * 2
-            if (planeX < 10)
-                planeX = 10
-            let planeZ = (bound.max.z - bound.min.z) * 2
-            if (planeZ < 10)
-                planeZ = 10
-            plane.scale.set(planeX, 1, planeZ)
-            let radAngle = THREE.MathUtils.degToRad(60)
-            directLight.castShadow = true
-            let limit = lightDistance * Math.tan(radAngle)
-            directLight.shadow.camera.left = -limit
-            directLight.shadow.camera.right = limit
-            directLight.shadow.camera.bottom = -limit
-            directLight.shadow.camera.top = limit
-            directLight.shadow.camera.far = 2000
-            directLight.shadow.mapSize.set(128, 128)
-            positionCamera(bound)
-            new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
-                status = 100
-                iterateModel(model.scene, threeJsObject => {
-                    if (threeJsObject.isMesh)
-                    {    
-                        threeJsObject.material.envMap = cubeTexture
-                        threeJsObject.material.envMapIntensity = 1
-                        threeJsObject.castShadow = true
-                        threeJsObject.receiveShadow = true
-                    }
-                })
-                widthDimension = new WidthDimension(scene, cameraPos.z)
-                widthDimension.setSize(bound.max.x - bound.min.x)
-                let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
-                widthDimension.setText(width+' in')
-                widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2) + deltaZ)
 
-                heightDimension = new HeightDimension(scene, cameraPos.z)
-                heightDimension.setSize(bound.max.y - bound.min.y)
-                let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
-                heightDimension.setText(height+' in')
-                heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2) + deltaX)
-                heightDimension.setY((bound.max.y - bound.min.y)/2)
+        if (!m.canActivateAR)
+        {
+            const ssaaRenderPass = new SSAARenderPass(scene, camera)
+            ssaaRenderPass.sampleLevel = 3
+            composer.insertPass(ssaaRenderPass, 0)
+            composer.removePass(renderPass)
+        }
 
-                depthDimension = new DepthDimension(scene, cameraPos.z)
-                depthDimension.setSize(bound.max.z - bound.min.z)
-                let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
-                depthDimension.setText(depth+' in')
-                depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2) + deltaX)
-                depthDimension.setY(bound.min.y)
-
-                document.body.removeChild(loadingScreen)
+        scene.add(model.scene)
+        ssaoPass.scene = model.scene
+        let bound = new THREE.Box3()
+        bound.setFromObject(model.scene)
+        let lightDistance = bound.max.y + ((bound.max.y + bound.min.y)/2)
+        if (lightDistance < 1)
+            lightDistance = 1
+        directLight.position.set(0, lightDistance, 0)
+        let deltaX = -((bound.max.x + bound.min.x)/2)
+        let deltaZ = -((bound.max.z + bound.min.z)/2)
+        model.scene.position.set(deltaX, 0, deltaZ)
+        let planeX = (bound.max.x - bound.min.x) * 2
+        if (planeX < 10)
+            planeX = 10
+        let planeZ = (bound.max.z - bound.min.z) * 2
+        if (planeZ < 10)
+            planeZ = 10
+        plane.scale.set(planeX, 1, planeZ)
+        let radAngle = THREE.MathUtils.degToRad(60)
+        directLight.castShadow = true
+        let limit = lightDistance * Math.tan(radAngle)
+        directLight.shadow.camera.left = -limit
+        directLight.shadow.camera.right = limit
+        directLight.shadow.camera.bottom = -limit
+        directLight.shadow.camera.top = limit
+        directLight.shadow.camera.far = 2000
+        directLight.shadow.mapSize.set(128, 128)
+        positionCamera(bound)
+        new THREE.CubeTextureLoader().setPath(CUBE_MAP_FOLDER).load(CUBE_MAP_NAMES, cubeTexture => {
+            status = 100
+            iterateModel(model.scene, threeJsObject => {
+                if (threeJsObject.isMesh)
+                {    
+                    threeJsObject.material.envMap = cubeTexture
+                    threeJsObject.material.envMapIntensity = 1
+                    threeJsObject.castShadow = true
+                    threeJsObject.receiveShadow = true
+                }
             })
+            widthDimension = new WidthDimension(scene, cameraPos.z)
+            widthDimension.setSize(bound.max.x - bound.min.x)
+            let width = (toInch(bound.max.x - bound.min.x)).toFixed('2')
+            widthDimension.setText(width+' in')
+            widthDimension.setZ(bound.max.z + (widthDimension.endLineSize * 2) + deltaZ)
+
+            heightDimension = new HeightDimension(scene, cameraPos.z)
+            heightDimension.setSize(bound.max.y - bound.min.y)
+            let height = (toInch(bound.max.y - bound.min.y)).toFixed('2')
+            heightDimension.setText(height+' in')
+            heightDimension.setX(bound.min.x - (heightDimension.endLineSize * 2) + deltaX)
+            heightDimension.setY((bound.max.y - bound.min.y)/2)
+
+            depthDimension = new DepthDimension(scene, cameraPos.z)
+            depthDimension.setSize(bound.max.z - bound.min.z)
+            let depth = (toInch(bound.max.z - bound.min.z)).toFixed('2')
+            depthDimension.setText(depth+' in')
+            depthDimension.setX(bound.max.x + (depthDimension.endLineSize * 2) + deltaX)
+            depthDimension.setY(bound.min.y)
+
+            document.body.removeChild(loadingScreen)
+        })
     }, p=>{
         status = (p.loaded/p.total) * 99
         status = Math.trunc(status)
