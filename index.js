@@ -6,6 +6,7 @@ import { RenderPass } from 'render-pass'
 import { SSAOPass } from 'ssao-pass'
 import { OutputPass } from 'output-pass'
 import { ShaderPass } from 'shader-pass'
+import { SSAARenderPass } from 'ssaa-pass'
 import { FXAAShader } from 'fxaa-shader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
@@ -43,7 +44,10 @@ window.onload = () =>
     const composer = new EffectComposer(renderer)
 
     const renderPass = new RenderPass(scene, camera)
-    composer.addPass(renderPass)
+    //composer.addPass(renderPass)
+    const ssaaRenderPass = new SSAARenderPass(scene, camera)
+    ssaaRenderPass.sampleLevel = 3
+    composer.addPass(ssaaRenderPass)
 
     const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight)
     ssaoPass.kernelRadius = 0.05
