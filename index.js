@@ -137,7 +137,7 @@ window.onload = () =>
         if (!m.canActivateAR)
         {
             const ssaaRenderPass = new SSAARenderPass(scene, camera)
-            ssaaRenderPass.sampleLevel = 3
+            ssaaRenderPass.sampleLevel = 2
             composer.insertPass(ssaaRenderPass, 0)
             composer.removePass(renderPass)
         }
