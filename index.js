@@ -11,7 +11,7 @@ import { FXAAShader } from 'fxaa-shader'
 import { QRViewer } from './QRViewer.js'
 import { WidthDimension, HeightDimension, DepthDimension } from './Dimension.js'
 
-const MODEL_PATH = 'assets/TMPL3660__KKTY3SNT.glb'
+const MODEL_PATH = 'assets/TMPL3660__KKTY3SNT.glb'//'assets/variant/MaterialsVariantsShoe.gltf'
 const CUBE_MAP_NAMES = ['px.png','nx.png','py.png','ny.png','pz.png','nz.png']
 const CUBE_MAP_FOLDER = 'cubemaps/' 
 
@@ -141,9 +141,9 @@ window.onload = () =>
             composer.insertPass(ssaaRenderPass, 0)
             composer.removePass(renderPass)
         }
-
         scene.add(model.scene)
         ssaoPass.scene = model.scene
+        applyVariant(model, 2)
         let bound = new THREE.Box3()
         bound.setFromObject(model.scene)
         let lightDistance = bound.max.y + ((bound.max.y + bound.min.y)/2)
@@ -273,6 +273,28 @@ window.onload = () =>
         {
             for (let i=0; i<node.children.length; i++)   
                 iterateModel(node.children[i], onNodeReach)
+        }
+    }
+
+    async function applyVariant(model, index = 0)
+    {
+        if (model.userData.gltfExtensions != undefined)
+        {
+            let extensions = model.userData.gltfExtensions['KHR_materials_variants']
+            if (extensions != undefined)
+            {
+                let variants = extensions.variants
+                console.log(variants)
+                if (index < variants.length)
+                {
+                    let parser = model.parser
+                    let material = await parser.getDependency('material', index)
+                    iterateModel(model.scene, mesh => {
+                        if (mesh.material != undefined)
+                            mesh.material = material
+                    })
+                } 
+            }
         }
     }
 }
